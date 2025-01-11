@@ -9,6 +9,9 @@ local pairs, select = pairs, select
 local GetNamePlateForUnit = C_NamePlate.GetNamePlateForUnit -- https://github.com/FrostAtom/awesome_wotlk
 local GetNumPartyMembers, GetNumRaidMembers = GetNumPartyMembers, GetNumRaidMembers
 local HasPetUI = HasPetUI
+local UnitName = UnitName
+local UnitExists = UnitExists
+local UnitCanAttack = UnitCanAttack
 local GetUnitRole = Engine.Compat.GetUnitRole
 -- UnitDetailedThreatSituation:
 -- 1: boolean - isTanking
@@ -179,7 +182,7 @@ end
 
 THREAT.Update = function(self, arg1, arg2)
 	-- Override ElvUI's THREAT Update
-	if not UnitExists("target") or (DT and DT.ShowingBGStats) then
+	if not UnitExists("target") or (DT and DT.ShowingBGStats) or not UnitCanAttack("player", "target") then
 		if THREAT.bar:IsShown() then
 			THREAT.bar:Hide()
 		end
