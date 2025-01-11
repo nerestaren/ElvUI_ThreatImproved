@@ -51,7 +51,7 @@ local GetHighestThreatExceptMe = function(unitID)
 	local largestThreatDetails = nil
 	if HasPetUI() then
 		local petThreat = { UnitDetailedThreatSituation("pet", unitID) }
-		if petThreat[3] > largestThreat then
+		if petThreat and petThreat[3] ~= nil and petThreat[3] > largestThreat then
 			largestThreat = petThreat[3]
 			largestThreatDetails = petThreat
 			largestUnit = "pet"
@@ -61,7 +61,7 @@ local GetHighestThreatExceptMe = function(unitID)
 		for i = 1, 40 do
 			if UnitExists(raidUnits[i]) and not UnitIsUnit(raidUnits[i], "player") then
 				local threat = { UnitDetailedThreatSituation(raidUnits[i], unitID) }
-				if threat[3] > largestThreat then
+				if threat and threat[3] ~= nil and threat[3] > largestThreat then
 					largestThreat = threat[3]
 					largestThreatDetails = threat
 					largestUnit = raidUnits[i]
@@ -72,7 +72,7 @@ local GetHighestThreatExceptMe = function(unitID)
 		for i = 1, 4 do
 			if UnitExists(partyUnits[i]) then
 				local threat = { UnitDetailedThreatSituation(partyUnits[i], unitID) }
-				if threat[3] ~= nil and threat[3] > largestThreat then
+				if threat and threat[3] ~= nil and threat[3] > largestThreat then
 					largestThreat = threat[3]
 					largestThreatDetails = threat
 					largestUnit = partyUnits[i]
