@@ -310,6 +310,11 @@ E:RegisterModule(ThreatImproved:GetName(), function()
 	ThreatImproved:RawHook(THREAT, "Update", HOOK_THREAT_Update)
 	ThreatImproved:RawHook(NP, "UnitDetailedThreatSituation", HOOK_NP_UnitDetailedThreatSituation)
 	ThreatImproved:RawHook(NP, "Update_HealthColor", HOOK_NP_Update_HealthColor)
+	-- Disable ElvUI_Extras' UNIT_THREAT_LIST_UPDATE event: we are handling it
+	local ElvUI_Extras = E:GetModule("Extras", true)
+	if ElvUI_Extras then
+		ElvUI_Extras:UnregisterEvent("UNIT_THREAT_LIST_UPDATE")
+	end
 end)
 
 local lastUpdated = {}
