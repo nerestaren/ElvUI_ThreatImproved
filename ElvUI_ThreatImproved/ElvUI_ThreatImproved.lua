@@ -226,9 +226,9 @@ local function UpdateNPThreat(unitID)
 	end
 	if not elvuiPlate then return end -- elvuiPlate is nil, it is sometimes created a bit later
 	local threatSituation, myThreatPct, otherUnit, otherThreatPct = GetThreatDetails(unitID)
-	if not threatSituation then return end
-	if elvuiPlate.ThreatStatus ~= threatSituation then
-		elvuiPlate.ThreatStatus = threatSituation
+	-- if not threatSituation then return end
+	if elvuiPlate.ImprovedThreatStatus ~= threatSituation then
+		elvuiPlate.ImprovedThreatStatus = threatSituation
 		NP:Update_HealthColor(elvuiPlate)
 	end
 	if elvuiPlate.ThreatPct ~= myThreatPct then
@@ -239,7 +239,7 @@ end
 
 local HOOK_NP_UnitDetailedThreatSituation = function(self, frame)
 	-- Override ElvUI's NP UnitDetailedThreatSituation
-	return frame.ThreatStatus
+	return frame.ImprovedThreatStatus
 end
 
 local HOOK_NP_Update_HealthColor = function(self, frame)
@@ -257,7 +257,7 @@ local HOOK_NP_Update_HealthColor = function(self, frame)
 	else
 		-- BEGIN CUSTOM
 		local db = NP.db.colors
-		local status = frame.ThreatStatus
+		local status = frame.ImprovedThreatStatus
 		if status then
 			local color = E.db.ThreatImproved[THREAT_SITUATIONS_TABLE[status]].color
 			scale = E.db.ThreatImproved[THREAT_SITUATIONS_TABLE[status]].scale
