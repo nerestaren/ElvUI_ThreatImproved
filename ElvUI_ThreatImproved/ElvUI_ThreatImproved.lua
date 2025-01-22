@@ -303,17 +303,14 @@ NP.Update_HealthColor = function(self, frame)
 	end
 end
 
-local frame = CreateFrame("Frame")
---frame:RegisterEvent("PLAYER_TARGET_CHANGED")
-frame:RegisterEvent("UNIT_THREAT_LIST_UPDATE")
---frame:RegisterEvent("PARTY_MEMBERS_CHANGED")
---frame:RegisterEvent("RAID_ROSTER_UPDATE")
---frame:RegisterEvent("UNIT_PET")
-frame:RegisterEvent("NAME_PLATE_UNIT_ADDED")
---frame:RegisterEvent("NAME_PLATE_UNIT_REMOVED")
+local ThreatImproved = E:NewModule("ThreatImproved", "AceEvent-3.0")
+E:RegisterModule(ThreatImproved:GetName(), function()
+	ThreatImproved:RegisterEvent("UNIT_THREAT_LIST_UPDATE", "Update")
+	ThreatImproved:RegisterEvent("NAME_PLATE_UNIT_ADDED", "Update")
+end)
 
 local lastUpdated = {}
-frame:SetScript("OnEvent", function(self, event, arg1, ...)
+function ThreatImproved:Update(event, arg1, ...)
 	if event == "UNIT_THREAT_LIST_UPDATE" then
 		if arg1 ~= nil then
 			local last = lastUpdated[arg1] or 0
@@ -327,10 +324,8 @@ frame:SetScript("OnEvent", function(self, event, arg1, ...)
 			-- Delay needed since ElvUI plate (plate.UnitFrame) is created a few frames after this event 
 			E:Delay(0.05, UpdateNPThreat, arg1)
 		end
-	-- elseif event == "NAME_PLATE_UNIT_REMOVED" then
-		
 	end
-end)
+end
 
 -- Options
 local function InsertOptions()
