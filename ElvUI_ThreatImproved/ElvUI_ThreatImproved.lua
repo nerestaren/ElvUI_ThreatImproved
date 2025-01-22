@@ -180,7 +180,7 @@ local function GetThreatDetails(unitID)
 	return threatSituation, myThreatPct, otherUnit, otherThreatPct
 end
 
-THREAT.Update = function(self, arg1, arg2)
+local HOOK_THREAT_Update = function(self, arg1, arg2)
 	-- Override ElvUI's THREAT Update
 	if not UnitExists("target") or (DT and DT.ShowingBGStats) or not UnitCanAttack("player", "target") then
 		if THREAT.bar:IsShown() then
@@ -237,12 +237,12 @@ local function UpdateNPThreat(unitID)
 	end
 end
 
-NP.UnitDetailedThreatSituation = function(self, frame)
+local HOOK_NP_UnitDetailedThreatSituation = function(self, frame)
 	-- Override ElvUI's NP UnitDetailedThreatSituation
 	return frame.ThreatStatus
 end
 
-NP.Update_HealthColor = function(self, frame)
+local HOOK_NP_Update_HealthColor = function(self, frame)
 	-- Mostly default ElvUI's NP Update_HealthColor
 	if not frame.Health:IsShown() then return end
 
@@ -303,10 +303,13 @@ NP.Update_HealthColor = function(self, frame)
 	end
 end
 
-local ThreatImproved = E:NewModule("ThreatImproved", "AceEvent-3.0")
+local ThreatImproved = E:NewModule("ThreatImproved", "AceEvent-3.0", "AceHook-3.0")
 E:RegisterModule(ThreatImproved:GetName(), function()
 	ThreatImproved:RegisterEvent("UNIT_THREAT_LIST_UPDATE", "Update")
 	ThreatImproved:RegisterEvent("NAME_PLATE_UNIT_ADDED", "Update")
+	ThreatImproved:RawHook(THREAT, "Update", HOOK_THREAT_Update)
+	ThreatImproved:RawHook(NP, "UnitDetailedThreatSituation", HOOK_NP_UnitDetailedThreatSituation)
+	ThreatImproved:RawHook(NP, "Update_HealthColor", HOOK_NP_Update_HealthColor)
 end)
 
 local lastUpdated = {}
