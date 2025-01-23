@@ -327,12 +327,12 @@ end
 local function InsertOptions()
 	local table = {
 		type = "group",
-		name = L["Name"],
+		name = L["Threat Improved"],
 		args = {
 			description = {
 				order = 0,
 				type = "description",
-				name = L["Description"],
+				name = L["Threat Improved Description"],
 			},
 			safePct = {
 				order = 1,

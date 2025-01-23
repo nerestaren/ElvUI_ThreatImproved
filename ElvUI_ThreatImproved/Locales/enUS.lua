@@ -1,11 +1,11 @@
 local AceLocale = LibStub:GetLibrary("AceLocale-3.0-ElvUI")
-local L = AceLocale:NewLocale("ElvUI", "enUS", true, true)
+local L = AceLocale:NewLocale("ElvUI", "enUS", true)
 if not L then return end
 
 local _, Engine = ...
 
-L["Name"] = "Threat Improved"
-L["Description"] = "Improves threat colors to support OffTanks in Threat panel and NamePlates."
+L["Threat Improved"] = "Threat Improved"
+L["Threat Improved Description"] = "Improves threat colors to support OffTanks in Threat panel and NamePlates."
 
 L["Safe Threat Percentage"] = "Safe Threat Percentage"
 L["Safe Threat Percentage Desc"] = "The percentage of 100%-based threat that is considered safe. Non-tanks above this value are unsafe; tanks below this value are unsafe."
