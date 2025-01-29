@@ -182,7 +182,7 @@ end
 
 local HOOK_THREAT_Update = function(self, arg1, arg2)
 	-- Override ElvUI's THREAT Update
-	if not UnitExists("target") or (DT and DT.ShowingBGStats) or not UnitCanAttack("player", "target") then
+	if not UnitExists("target") or (DT and DT.ShowingBGStats) or not UnitCanAttack("player", "target") or not UnitAffectingCombat("target") then
 		if THREAT.bar:IsShown() then
 			THREAT.bar:Hide()
 		end
