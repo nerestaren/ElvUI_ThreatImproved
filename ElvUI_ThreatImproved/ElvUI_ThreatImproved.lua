@@ -317,8 +317,10 @@ function ThreatImproved:Update(event, arg1, ...)
 		end
 	elseif event == "NAME_PLATE_UNIT_ADDED" then
 		if arg1 ~= nil then
-			-- Delay needed since ElvUI plate (plate.UnitFrame) is created a few frames after this event 
-			E:Delay(0.05, UpdateNPThreat, arg1)
+			if UnitCanAttack("player", arg1) and UnitAffectingCombat(arg1) then
+				-- Delay needed since ElvUI plate (plate.UnitFrame) is created a few frames after this event
+				E:Delay(0.05, UpdateNPThreat, arg1)
+			end
 		end
 	end
 end
