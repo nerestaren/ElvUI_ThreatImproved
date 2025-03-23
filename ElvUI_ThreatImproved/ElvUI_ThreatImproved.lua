@@ -237,6 +237,24 @@ local function UpdateNPThreat(unitID)
 	end
 end
 
+local function RemoveNPThreat(unitID)
+	local plateFrame = GetNamePlateForUnit(unitID)
+	if not plateFrame then return end
+	local elvuiPlate = plateFrame.UnitFrame
+	if not elvuiPlate then -- Compatibility with VirtualPlates
+		elvuiPlate = plateFrame:GetChildren().UnitFrame
+	end
+	if not elvuiPlate then return end
+	if elvuiPlate.ImprovedThreatStatus then
+		elvuiPlate.ImprovedThreatStatus = nil
+		NP:Update_HealthColor(elvuiPlate)
+	end
+	if elvuiPlate.ThreatPct then
+		elvuiPlate.ThreatPct = nil
+		-- do something with ThreatPct
+	end
+end
+
 local HOOK_NP_UnitDetailedThreatSituation = function(self, frame)
 	-- Override ElvUI's NP UnitDetailedThreatSituation
 	return frame.ImprovedThreatStatus
@@ -321,6 +339,11 @@ function ThreatImproved:Update(event, arg1, ...)
 				-- Delay needed since ElvUI plate (plate.UnitFrame) is created a few frames after this event
 				E:Delay(0.05, UpdateNPThreat, arg1)
 			end
+		end
+	elseif event == "NAME_PLATE_UNIT_REMOVED" then
+		if arg1 ~= nil then
+			lastUpdated[arg1] = nil
+			RemoveNPThreat(arg1)
 		end
 	end
 end
@@ -442,6 +465,7 @@ end
 E:RegisterModule(ThreatImproved:GetName(), function()
 	ThreatImproved:RegisterEvent("UNIT_THREAT_LIST_UPDATE", "Update")
 	ThreatImproved:RegisterEvent("NAME_PLATE_UNIT_ADDED", "Update")
+	ThreatImproved:RegisterEvent("NAME_PLATE_UNIT_REMOVED", "Update")
 	ThreatImproved:RawHook(THREAT, "Update", HOOK_THREAT_Update)
 	ThreatImproved:RawHook(NP, "UnitDetailedThreatSituation", HOOK_NP_UnitDetailedThreatSituation)
 	ThreatImproved:RawHook(NP, "Update_HealthColor", HOOK_NP_Update_HealthColor)

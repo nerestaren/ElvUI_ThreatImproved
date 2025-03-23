@@ -1,7 +1,7 @@
 ## Interface: 30300
 ## Title: |cff1784d1E|r|cffe5e3e3lvUI|r |cff1784d1T|r|cffe5e3e3hreat|r |cff1784d1I|r|cffe5e3e3mproved|r
 ## Notes: Improves threat colors to support OffTanks in Threat panel and NamePlates.
-## Version: 0.0.4
+## Version: 0.0.5
 ## Author: Nerestaren
 ## RequiredDeps: ElvUI
 ## X-Website: https://github.com/nerestaren/ElvUI_ThreatImproved
