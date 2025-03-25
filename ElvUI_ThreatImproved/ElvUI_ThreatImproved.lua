@@ -217,14 +217,21 @@ local HOOK_THREAT_Update = function(self, arg1, arg2)
 	end
 end
 
-local function UpdateNPThreat(unitID)
+local function UpdateNPThreat(unitID, shouldTryAgain)
 	local plateFrame = GetNamePlateForUnit(unitID)
 	if not plateFrame then return end
 	local elvuiPlate = plateFrame.UnitFrame
 	if not elvuiPlate then -- Compatibility with VirtualPlates
 		elvuiPlate = plateFrame:GetChildren().UnitFrame
 	end
-	if not elvuiPlate then return end -- elvuiPlate is nil, it is sometimes created a bit later
+	if not elvuiPlate then
+		-- elvuiPlate is nil, it is sometimes created a bit later
+		if shouldTryAgain then
+			-- we try again, once
+			E:Delay(0.05, UpdateNPThreat, unitID, nil)
+		end
+		return
+	end
 	local threatSituation, myThreatPct, otherUnit, otherThreatPct = GetThreatDetails(unitID)
 	-- if not threatSituation then return end
 	if elvuiPlate.ImprovedThreatStatus ~= threatSituation then
@@ -336,8 +343,11 @@ function ThreatImproved:Update(event, arg1, ...)
 	elseif event == "NAME_PLATE_UNIT_ADDED" then
 		if arg1 ~= nil then
 			if UnitCanAttack("player", arg1) and UnitAffectingCombat(arg1) then
+				lastUpdated[arg1] = GetTime()
+				UpdateNPThreat(arg1, true)
 				-- Delay needed since ElvUI plate (plate.UnitFrame) is created a few frames after this event
-				E:Delay(0.05, UpdateNPThreat, arg1)
+				-- We will do it inside the function only if needed, instead of always
+				-- E:Delay(0.05, UpdateNPThreat, arg1)
 			end
 		end
 	elseif event == "NAME_PLATE_UNIT_REMOVED" then
